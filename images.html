@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buenas noches</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f2f1f8;
+            background-image: radial-gradient(circle at top right, #ddd1ff, transparent 400px),
+                              radial-gradient(circle at bottom left, #c8ccff, transparent 400px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-wrapper {
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            background-color: white;
+            margin: 20px;
+            transition: transform 0.3s ease, box-shadow 0.4s ease;
+        }
+
+        .card-wrapper:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 117, 140, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background-image:
+                linear-gradient(135deg, rgba(117, 200, 255, 0.8) 0%, rgba(126, 203, 255, 0.9) 100%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M50,30 C35,10 10,20 10,40 C10,60 25,65 50,90 C75,65 90,60 90,40 C90,20 65,10 50,30 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover, 80px;
+            color: rgb(44, 245, 185);
+            position: relative;
+        }
+
+        .header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.1),
+                rgba(255, 255, 255, 0.1) 10px,
+                rgba(255, 255, 255, 0) 10px,
+                rgba(255, 255, 255, 0) 20px
+            );
+            animation: headerShimmer 15s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes headerShimmer {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .floating-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .floating-heart {
+            position: absolute;
+            opacity: 0.6;
+            animation: floatUp 12s linear infinite;
+            color: rgba(24, 252, 202, 0.719);
+            font-size: 16px;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(100%) rotate(0deg);
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100%) rotate(360deg);
+            }
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.8em;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #75ccff; }
+            to { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #75d8ff; }
+        }
+
+        .subtitle {
+            font-style: italic;
+            margin-top: 15px;
+            font-size: 1.3em;
+            opacity: 0.9;
+            position: relative;
+            display: inline-block;
+            padding: 0 10px;
+            animation: slideIn 1.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 0.9; }
+        }
+
+        .subtitle::before,
+        .subtitle::after {
+            content: "❀";
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.8;
+            animation: pulse 2s ease-in-out infinite alternate;
+        }
+
+        .subtitle::before {
+            left: -15px;
+        }
+
+        .subtitle::after {
+            right: -15px;
+        }
+
+        @keyframes pulse {
+            from { transform: translateY(-50%) scale(0.8); }
+            to { transform: translateY(-50%) scale(1.2); }
+        }
+
+        .message {
+            padding: 25px;
+            text-align: center;
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 15px;
+            padding: 20px;
+        }
+
+        .photo-container {
+            position: relative;
+            border-radius: 12px;
+            height: 0;
+            padding-top: 100%; /* 1:1 Aspect Ratio */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .photo-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .photo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .photo-container:hover .photo {
+            transform: scale(1.1);
+        }
+
+        .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            color: white;
+            padding: 20px 10px 10px;
+            font-size: 0.9em;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .photo-container:hover .caption {
+            opacity: 1;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px 15px;
+            background: linear-gradient(to right, #75d3ff, #7edaff);
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        /* Animation for heart beats */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .heart-icon {
+            display: inline-block;
+            color: white;
+            font-size: 1.4em;
+            animation: heartbeat 1.5s infinite;
+            margin: 0 8px;
+        }
+
+        /* Photo hover effect enhancement */
+        .photo-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 50%, rgba(255, 117, 140, 0.3) 100%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .photo-container:hover::after {
+            opacity: 1;
+        }
+
+        /* Message section animation */
+        .message p {
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .message p:nth-child(1) {
+            animation: fadeInUp 0.6s 0.2s forwards ease-out;
+        }
+
+        .message p:nth-child(2) {
+            animation: fadeInUp 0.6s 0.4s forwards ease-out;
+        }
+
+        .message p:nth-child(3) {
+            animation: fadeInUp 0.6s 0.6s forwards ease-out;
+        }
+
+        .message p:nth-child(4) {
+            animation: fadeInUp 0.6s 0.8s forwards ease-out;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Footer enhancement */
+        .footer {
+            position: relative;
+        }
+
+        .footer::after {
+            content: "";
+            position: absolute;
+            left: -50%;
+            top: 0;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Animation for fading in the card */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-wrapper {
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Photo grid animation */
+        .photo-container {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .photo-container:nth-child(1) {
+            animation: scaleIn 0.6s 1.0s forwards ease-out;
+        }
+
+        .photo-container:nth-child(2) {
+            animation: scaleIn 0.6s 1.2s forwards ease-out;
+        }
+
+        .photo-container:nth-child(3) {
+            animation: scaleIn 0.6s 1.4s forwards ease-out;
+        }
+
+        .photo-container:nth-child(4) {
+            animation: scaleIn 0.6s 1.6s forwards ease-out;
+        }
+
+        .photo-container:nth-child(5) {
+            animation: scaleIn 0.6s 1.8s forwards ease-out;
+        }
+
+        .photo-container:nth-child(6) {
+            animation: scaleIn 0.6s 2s forwards ease-out;
+        }
+        .photo-container:nth-child(7) {
+            animation: scaleIn 0.6s 2.2s forwards ease-out;
+        }
+        .photo-container:nth-child(8) {
+            animation: scaleIn 0.6s 2.4s forwards ease-out;
+        }
+        .photo-container:nth-child(9) {
+            animation: scaleIn 0.6s 2.6s forwards ease-out;
+        }
+        .photo-container:nth-child(10) {
+            animation: scaleIn 0.6s 2.8s forwards ease-out;
+        }
+        @keyframes scaleIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* 3D tilt effect */
+        .card-wrapper {
+            transition: transform 0.5s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 500px) {
+            .photo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .subtitle {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card-wrapper">
+        <div class="header">
+            <div class="floating-hearts" id="floating-hearts"></div>
+            <div class="header-content">
+                <h1>Feliz día Ma'</h1><br>
+                <p class="subtitle">Siempre seras la mejor madre</p>
+            </div>
+        </div>
+
+
+        <audio src="audio/tell-me.mp3" autoplay loop></audio>
+
+        <div class="message">
+            <p><strong>Tuve suerte en que el universo me favoreciera con una madre como tú</strong></p>
+        </div>
+
+        <div class="photo-grid">
+            <div class="photo-container">
+                <img class="photo" src="images/IMG_20181029_113237.jpg" alt="Mother's Day Memory">
+            </div>
+            <div class="photo-container">
+                <img class="photo" src="images/Imagen de WhatsApp 2025-05-11 a las 23.58.01_8c847c1e.jpg" alt="Mother's Day Memory">
+            </div>
+            <div class="photo-container">
+                <img class="photo" src="images/IMG_20181115_224209.jpg" alt="Mother's Day Memory">
+            </div>
+            <div class="photo-container">
+                <img class="photo" src="images/IMG_20181218_185630.jpg" alt="Mother's Day Memory">
+            </div>
+            <div class="photo-container">
+                <img class="photo" src="images/IMG_20181223_094616.jpg" alt="Mother's Day Memory">
+            </div>
+            <div class="photo-container">
+                <img class="photo" src="images/IMG_20181230_180312.jpg" alt="Mother's Day Memory">
+            </div>
+            <div class="photo-container">
+                <img class="photo" src="images/IMG_20211219_175412.jpg" alt="Mother's Day Memory">
+            </div>
+            <div class="photo-container">
+                <img class="photo" src="images/IMG_20211225_003518.jpg" alt="Mother's Day Memory">
+            </div>
+            <div class="photo-container">
+                <img class="photo" src="images/IMG_20220103_113035.jpg" alt="Mother's Day Memory">
+            </div>
+            <div class="photo-container">
+                <img class="photo" src="images/IMG_20220107_141429.jpg" alt="Mother's Day Memory">
+            </div>
+        </div>
+
+        <div class="footer">
+            <span class="heart-icon">♥</span>
+            Con todo mi amor, hoy y siempre...
+            <span class="heart-icon">♥</span>
+        </div>
+    </div>
+    <script>
+        // Create floating hearts in the header
+        document.addEventListener('DOMContentLoaded', function() {
+            const floatingHeartsContainer = document.getElementById('floating-hearts');
+            const heartSymbols = ['♥', '❤', '♡', '❥', '❣'];
+
+            // Create 15 floating hearts
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+
+                // Random heart type
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+
+                // Random starting position
+                const left = Math.random() * 100;
+                heart.style.left = left + '%';
+
+                // Random size
+                const size = 12 + Math.random() * 20;
+                heart.style.fontSize = size + 'px';
+
+                // Random animation delay
+                const delay = Math.random() * 12;
+                heart.style.animationDelay = delay + 's';
+
+                // Random animation duration
+                const duration = 7 + Math.random() * 7;
+                heart.style.animationDuration = duration + 's';
+
+                floatingHeartsContainer.appendChild(heart);
+            }
+
+            // Add interactive 3D tilt effect to card
+            const card = document.querySelector('.card-wrapper');
+
+        });
+    </script>
+</body>
+</html>
